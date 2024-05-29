@@ -1,9 +1,9 @@
 import os
 import asyncio
 import streamlit as st
-import pdfkit
 import markdown2
 from io import BytesIO
+from weasyprint import HTML
 
 os.environ['OPENAI_API_KEY'] = st.secrets["OPENAI_API_KEY"]
 os.environ['TAVILY_API_KEY'] = st.secrets["OPENAI_API_KEY"]
@@ -18,8 +18,8 @@ async def get_report(query: str, report_type: str) -> str:
 
 def convert_markdown_to_pdf(markdown_text: str) -> BytesIO:
     html_text = markdown2.markdown(markdown_text)
-    pdf = pdfkit.from_string(html_text, False)  # Create PDF from HTML string
-    pdf_file = BytesIO(pdf)  # Create a BytesIO object from the PDF bytes
+    pdf_file = BytesIO()
+    HTML(string=html_text).write_pdf(pdf_file)
     pdf_file.seek(0)
     return pdf_file
 
