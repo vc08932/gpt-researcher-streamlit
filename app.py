@@ -30,8 +30,8 @@ def convert_markdown_to_pdf(markdown_text: str) -> BytesIO:
         pdf.multi_cell(0, 10, line)
     # Create a BytesIO buffer to hold the PDF data
     pdf_buffer = BytesIO()
-    pdf.output(pdf_buffer)
-    pdf_buffer.seek(0)
+    pdf.output(pdf_buffer, 'F')  # Write PDF to the buffer
+    pdf_buffer.seek(0)  # Move the cursor to the beginning of the buffer
     return pdf_buffer
 
 def get_report_sync(query: str, report_type: str) -> str:
@@ -60,5 +60,5 @@ if "report" in st.session_state:
         label="Download PDF",
         data=pdf_file,
         file_name=f"{st.session_state['filename']}.pdf",
-        mime="application/pdf"
+        mime="application/octet-stream"  # Correct MIME type for PDF
     )
