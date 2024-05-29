@@ -27,18 +27,23 @@ report_type = "research_report"
 
 st.title("GPT Researcher")
 query = st.text_input("Enter your query")
+filename = st.text_input("Enter filename for the PDF (without extension)", "report")
+
 if st.button("Get Report"):
-    report = asyncio.run(get_report(query, report_type))
-    st.session_state["report"] = report
-    st.markdown(st.session_state["report"])
+    if query:
+        with st.spinner("Generating report..."):
+            report_future = asyncio.create_task(get_report(query, report_type))
+            report = asyncio.run(report_future)
+            st.session_state["report"] = report
+            st.markdown(st.session_state["report"])
 
-    filename = st.text_input("Enter filename for the PDF (without extension)", "report")
-
-    if st.button("Download Report as PDF"):
-        pdf_file = convert_markdown_to_pdf(st.session_state["report"])
-        st.download_button(
-            label="Download PDF",
-            data=pdf_file,
-            file_name=f"{filename}.pdf",
-            mime="application/pdf"
-        )
+            if st.button("Download Report as PDF"):
+                pdf_file = convert_markdown_to_pdf(st.session_state["report"])
+                st.download_button(
+                    label="Download PDF",
+                    data=pdf_file,
+                    file_name=f"{filename}.pdf",
+                    mime="application/pdf"
+                )
+    else:
+        st.warning("Please enter a query")
