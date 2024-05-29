@@ -33,7 +33,7 @@ def convert_markdown_to_pdf(markdown_text: str) -> BytesIO:
 async def main(query: str, report_type: str):
     report = await get_report(query, report_type)
     st.session_state["report"] = report
-    st.markdown(report)
+    st.experimental_rerun()
 
 report_type = "research_report"
 
@@ -44,7 +44,7 @@ filename = st.text_input("Enter filename for the PDF (without extension)", "repo
 if st.button("Get Report"):
     if query:
         with st.spinner("Generating report..."):
-            asyncio.create_task(main(query, report_type))
+            asyncio.run(main(query, report_type))
     else:
         st.warning("Please enter a query")
 
