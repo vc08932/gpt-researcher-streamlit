@@ -37,15 +37,17 @@ if st.button("Get Report"):
         with st.spinner("Generating report..."):
             report = get_report_sync(query, report_type)
             st.session_state["report"] = report
-            st.markdown(st.session_state["report"])
+            st.session_state["filename"] = filename
+            st.markdown(report)
+else:
+    st.warning("Please enter a query")
 
-            if st.button("Download Report as PDF"):
-                pdf_file = convert_markdown_to_pdf(st.session_state["report"])
-                st.download_button(
-                    label="Download PDF",
-                    data=pdf_file,
-                    file_name=f"{filename}.pdf",
-                    mime="application/pdf"
-                )
-    else:
-        st.warning("Please enter a query")
+if "report" in st.session_state:
+    st.markdown(st.session_state["report"])
+    if st.button("Download Report as PDF"):
+        pdf_file = convert_markdown_to_pdf(st.session_state["report"])
+        st.download_button(
+            label="Download PDF",
+            data=pdf_file,
+            file_name=f"{st.session_state['filename']}.pdf"
+        )
