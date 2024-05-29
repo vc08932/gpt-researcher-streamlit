@@ -1,8 +1,9 @@
+import os
 import asyncio
 import streamlit as st
-from dotenv import load_dotenv
 
-load_dotenv()
+os.environ['OPENAI_API_KEY'] = st.secrets["OPENAI_API_KEY"]
+os.environ['TAVILY_API_KEY'] = st.secrets["OPENAI_API_KEY"]
 
 from gpt_researcher import GPTResearcher
 
