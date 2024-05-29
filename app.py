@@ -3,8 +3,7 @@ import asyncio
 import streamlit as st
 import markdown2
 from io import BytesIO
-from reportlab.lib.pagesizes import letter
-from reportlab.pdfgen import canvas
+from fpdf import FPDF
 
 os.environ['OPENAI_API_KEY'] = st.secrets["OPENAI_API_KEY"]
 os.environ['TAVILY_API_KEY'] = st.secrets["OPENAI_API_KEY"]
@@ -18,21 +17,20 @@ async def get_report(query: str, report_type: str) -> str:
     return report
 
 def convert_markdown_to_pdf(markdown_text: str) -> BytesIO:
-    # Convert markdown to HTML and strip HTML tags to get plain text
+    # Convert markdown to plain text
     plain_text = markdown2.markdown(markdown_text)
-    # Create a BytesIO buffer to hold the PDF data
-    pdf_buffer = BytesIO()
-    # Create a canvas object using reportlab
-    p = canvas.Canvas(pdf_buffer, pagesize=letter)
+    # Create a PDF object
+    pdf = FPDF()
+    pdf.add_page()
+    pdf.set_auto_page_break(auto=True, margin=15)
+    pdf.set_font("Arial", size=12)
     # Split the plain text into lines to add to the PDF
     lines = plain_text.split('\n')
-    # Start adding text to the PDF
-    y = 750  # Initial position from the top
     for line in lines:
-        p.drawString(30, y, line)
-        y -= 15  # Move to the next line
-    # Save the PDF into the buffer
-    p.save()
+        pdf.multi_cell(0, 10, line)
+    # Create a BytesIO buffer to hold the PDF data
+    pdf_buffer = BytesIO()
+    pdf.output(pdf_buffer)
     pdf_buffer.seek(0)
     return pdf_buffer
 
