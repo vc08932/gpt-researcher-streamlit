@@ -4,7 +4,7 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-from gtp_researcher import GTPResearcher
+from gpt_researcher import GPTResearcher
 
 async def get_report(query: str, report_type: str) -> str:
     researcher = GPTResearcher(query, report_type)
