@@ -23,6 +23,9 @@ def convert_markdown_to_pdf(markdown_text: str) -> BytesIO:
     pdf_file.seek(0)
     return pdf_file
 
+def get_report_sync(query: str, report_type: str) -> str:
+    return asyncio.run(get_report(query, report_type))
+
 report_type = "research_report"
 
 st.title("GPT Researcher")
@@ -32,8 +35,7 @@ filename = st.text_input("Enter filename for the PDF (without extension)", "repo
 if st.button("Get Report"):
     if query:
         with st.spinner("Generating report..."):
-            report_future = asyncio.create_task(get_report(query, report_type))
-            report = asyncio.run(report_future)
+            report = get_report_sync(query, report_type)
             st.session_state["report"] = report
             st.markdown(st.session_state["report"])
 
