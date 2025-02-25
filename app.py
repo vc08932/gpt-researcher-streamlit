@@ -6,7 +6,8 @@ from io import BytesIO
 from fpdf import FPDF
 
 os.environ['OPENAI_API_KEY'] = st.secrets["OPENAI_API_KEY"]
-os.environ['TAVILY_API_KEY'] = st.secrets["OPENAI_API_KEY"]
+os.environ['OPENAI_BASE_URL'] = st.secrets["OPENAI_BASE_URL"]
+os.environ['TAVILY_API_KEY'] = st.secrets["TAVILY_API_KEY"]
 
 from gpt_researcher import GPTResearcher
 
