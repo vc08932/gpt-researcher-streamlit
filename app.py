@@ -5,10 +5,10 @@ import markdown2
 from io import BytesIO
 from fpdf import FPDF
 
-GOOGLE_API_KEY = st.secrets["OPENAI_API_KEY"]
-FAST_LLM = "gemini-2.0-flash-lite-preview-02-05"
-STRATEGIC_LLM="google_genai:gemini-2.0-flash"
-SMART_LLM="google_genai:gemini-2.0-flash"
+os.environ["GOOGLE_API_KEY"] = st.secrets["OPENAI_API_KEY"]
+os.environ["FAST_LLM"] = "gemini-2.0-flash-lite-preview-02-05"
+os.environ["STRATEGIC_LLM"] = "google_genai:gemini-2.0-flash"
+os.environ["SMART_LLM"] = "google_genai:gemini-2.0-flash"
 
 os.environ['TAVILY_API_KEY'] = st.secrets["TAVILY_API_KEY"]
 
